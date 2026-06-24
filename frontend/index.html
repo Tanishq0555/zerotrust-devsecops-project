@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notes App</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f4f5f7;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+    }
+    h1 { margin: 0 0 20px; font-size: 24px; color: #1a1a1a; }
+    .input-row { display: flex; gap: 8px; margin-bottom: 20px; }
+    input {
+      flex: 1; padding: 10px 14px; border: 1px solid #ddd;
+      border-radius: 8px; font-size: 14px;
+    }
+    input:focus { outline: none; border-color: #4f46e5; }
+    button {
+      background: #4f46e5; color: #fff; border: none;
+      padding: 10px 18px; border-radius: 8px; font-size: 14px; cursor: pointer;
+    }
+    button:hover { background: #4338ca; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background: #f9fafb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 14px;
+    }
+    .delete-btn {
+      background: #ef4444;
+      padding: 4px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      margin-left: 10px;
+    }
+    .delete-btn:hover { background: #dc2626; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Secure Notes</h1>
+    <div class="input-row">
+      <input id="noteInput" placeholder="Write a note..." />
+      <button onclick="addNote()">Add</button>
+    </div>
+    <ul id="notesList"></ul>
+  </div>
+
+  <script>
+    const API_URL = 'http://192.168.80.160:3000/api/notes';
+
+    async function loadNotes() {
+      const res = await fetch(API_URL);
+      const notes = await res.json();
+      document.getElementById('notesList').innerHTML =
+        notes.map(n => `
+          <li>
+            <span>${n.content}</span>
+            <button class="delete-btn" onclick="deleteNote(${n.id})">Delete</button>
+          </li>
+        `).join('');
+    }
+
+    async function addNote() {
+      const input = document.getElementById('noteInput');
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: input.value })
+      });
+      input.value = '';
+      loadNotes();
+    }
+
+    async function deleteNote(id) {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      loadNotes();
+    }
+
+    loadNotes();
+  </script>
+</body>
+</html>
