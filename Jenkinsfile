@@ -22,11 +22,18 @@ pipeline {
 	    }
 	}
 
-        stage('SonarQube - SAST') {
-            steps {
-                echo 'Running SonarQube scan...'
-            }
-        }
+
+	stage('SonarQube - SAST') {
+	    steps {
+		withSonarQubeEnv('sonarqube') {
+		sh "${tool 'sonarqube-scanner'}/bin/sonar-scanner"
+			}
+		}
+	}
+	
+	
+	
+	
 
         stage('Docker Build') {
             steps {
