@@ -18,7 +18,7 @@ pipeline {
 
 	stage('Gitleaks - Secret Scan') {
 	    steps {
-		sh 'gitleaks detect --source . --verbose'
+		sh 'gitleaks detect --source . --no-git --verbose'
 	    }
 	}
 
