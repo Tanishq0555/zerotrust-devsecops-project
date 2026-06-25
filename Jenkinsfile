@@ -16,11 +16,11 @@ pipeline {
             }
         }
 
-        stage('Gitleaks - Secret Scan') {
-            steps {
-                echo 'Running Gitleaks...'
-            }
-        }
+	stage('Gitleaks - Secret Scan') {
+	    steps {
+		sh 'gitleaks detect --source . --verbose'
+	    }
+	}
 
         stage('SonarQube - SAST') {
             steps {
