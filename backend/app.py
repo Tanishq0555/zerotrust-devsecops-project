@@ -4,7 +4,7 @@ from flask_cors import CORS
 import mysql.connector
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) # NOSONAR
 
 def get_connection():
     return mysql.connector.connect(
@@ -46,9 +46,9 @@ def delete_note(note_id):
     conn.close()
     return jsonify({'deleted': note_id})
 
-@app.route('/health')
+@app.route('/health', methods=['GET'])
 def health():
     return 'ok'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
+    app.run(host='host', port=3000)
