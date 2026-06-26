@@ -54,4 +54,4 @@ def health():
 if __name__ == '__main__':
     # SYNTAX ERROR EXAMPLE: 
     # Removing the port or using an invalid type would cause a startup error.
-    app.run(host='host', port=3000)
+    app.run(host='0.0.0.0', port=3000)
