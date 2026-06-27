@@ -44,15 +44,18 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh """
-            docker build -t ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} ./backend
-            docker build -t ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG} ./frontend
+            	docker build -t ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} ./backend
+            	docker build -t ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG} ./frontend
         """
             }
         }
 
         stage('Trivy - Image Scan') {
             steps {
-                echo 'Running Trivy scan...'
+                sh """
+            	trivy image --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
+            	trivy image --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
+        """
             }
         }
 
