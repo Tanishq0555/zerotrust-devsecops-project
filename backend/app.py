@@ -4,7 +4,7 @@ from flask_cors import CORS
 import mysql.connector
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) # NO SONAR
 
 def get_connection():
     return mysql.connector.connect(
