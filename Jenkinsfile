@@ -43,7 +43,10 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                echo 'Building Docker images...'
+                sh """
+            docker build -t ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} ./backend
+            docker build -t ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG} ./frontend
+        """
             }
         }
 
