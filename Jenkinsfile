@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_TAG = "${env.GIT_COMMIT[0..6]}"
-        DOCKERHUB_USER = "atharvahange03"
+        DOCKERHUB_USER = "atharvahange"
         IMAGE_NAME_BACKEND = "${DOCKERHUB_USER}/ztso-backend"
         IMAGE_NAME_FRONTEND = "${DOCKERHUB_USER}/ztso-frontend"
     }
@@ -59,6 +59,21 @@ stage('Gitleaks - Secret Scan') {
         		"""
     		}
 	}
+
+
+
+	stage('Docker Push') {
+		steps {
+		withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+		sh """
+                echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                docker push ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
+                docker push ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
+            	"""
+        		}
+		}
+	}
+
 
         stage('Docker Push') {
             steps {
