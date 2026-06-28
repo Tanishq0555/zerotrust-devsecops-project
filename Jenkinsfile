@@ -84,6 +84,7 @@ stage('Gitleaks - Secret Scan') {
         ]) {
             sh """
                 cosign sign --key $COSIGN_KEY \
+		    --tlog-upload=false \
                     -a "pipeline=jenkins" \
                     -a "commit=${IMAGE_TAG} " \
                     ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} --yes
