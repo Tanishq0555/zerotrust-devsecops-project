@@ -9,7 +9,12 @@ pipeline {
     }
 
     stages {
-
+		stage('Cleanup') {
+		    steps {
+        		cleanWs()
+    		}
+		}
+		
         stage('Checkout') {
             steps {
                 echo "Building commit: ${env.GIT_COMMIT}"
