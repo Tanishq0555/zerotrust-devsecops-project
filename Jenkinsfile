@@ -75,11 +75,27 @@ stage('Gitleaks - Secret Scan') {
 	}
 
 
-        stage('Cosign - Image Sign') {
-            steps {
-                echo 'Signing images...'
-            }
-        }
+
+	stage('Cosign - Image Sign') {
+    steps {
+        withCredentials([
+            file(credentialsId: 'cosign-private-key', variable: 'COSIGN_KEY'),
+            string(credentialsId: 'cosign-password', variable: 'COSIGN_PASSWORD')
+        ]) {
+            sh """
+                cosign sign --key $COSIGN_KEY \
+                    -a "pipeline=jenkins" \
+                    -a "commit=${IMAGE_TAG} " \
+                    ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} --yes
+                cosign sign --key $COSIGN_KEY \
+                    -a "pipeline=jenkins" \
+                    -a "commit=${IMAGE_TAG}" \
+                    ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG} --yes
+            """
+        	   }
+    		}
+	}
+
 
         stage('Helm Deploy') {
             steps {
