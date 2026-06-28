@@ -19,7 +19,7 @@ pipeline {
 stage('Gitleaks - Secret Scan') {
     steps {
         sh 'rm -rf .scannerwork'
-        sh 'gitleaks detect --source . --no-git --verbose --config .gitleaks.toml'
+        sh 'gitleaks detect --source . --no-git --verbose'
     }
 }
 
