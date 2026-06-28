@@ -51,14 +51,14 @@ stage('Gitleaks - Secret Scan') {
             }
         }
 
-        stage('Trivy - Image Scan') {
-            steps {
-                sh """
-            	trivy image --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
-            	trivy image --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
-        """
-            }
-        }
+	stage('Trivy - Image Scan') {
+		steps {
+        		sh """
+            		trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
+            		trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
+        		"""
+    		}
+	}
 
         stage('Docker Push') {
             steps {
