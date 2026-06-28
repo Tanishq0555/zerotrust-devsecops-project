@@ -9,23 +9,19 @@ pipeline {
     }
 
     stages {
-		stage('Cleanup') {
-		    steps {
-        		cleanWs()
-    		}
-		}
-		
-        stage('Checkout') {
-            steps {
-                echo "Building commit: ${env.GIT_COMMIT}"
-            }
-        }
+		stage('Checkout') {
+    steps {
+        checkout scm
+        echo "Building commit: ${env.GIT_COMMIT}"
+    }
+}
 
-	stage('Gitleaks - Secret Scan') {
-	    steps {
-		sh 'gitleaks detect --source . --no-git --verbose'
-	    }
-	}
+stage('Gitleaks - Secret Scan') {
+    steps {
+        sh 'rm -rf .scannerwork'
+        sh 'gitleaks detect --source . --no-git --verbose --config .gitleaks.toml'
+    }
+}
 
 
 	stage('SonarQube - SAST') {
