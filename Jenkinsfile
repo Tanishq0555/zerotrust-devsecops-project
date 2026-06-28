@@ -75,12 +75,6 @@ stage('Gitleaks - Secret Scan') {
 	}
 
 
-        stage('Docker Push') {
-            steps {
-                echo 'Pushing images to DockerHub...'
-            }
-        }
-
         stage('Cosign - Image Sign') {
             steps {
                 echo 'Signing images...'
