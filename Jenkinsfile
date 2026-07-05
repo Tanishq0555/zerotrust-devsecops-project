@@ -99,8 +99,8 @@ pipeline {
                         writeFile file: '/tmp/kubeconfig-jenkins', text: KUBECONFIG_CONTENT
                     }
                     sh """
-                        helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso \
                         cat /tmp/kubeconfig-jenkins
+                        helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso \
                           --namespace ztso-app \
                           --set image.tag=${IMAGE_TAG} \
                           --kubeconfig /tmp/kubeconfig-jenkins
