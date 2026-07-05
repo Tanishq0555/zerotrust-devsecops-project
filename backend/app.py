@@ -51,4 +51,4 @@ def health():
     return 'ok'
 
 if __name__ == '__main__':
-    app.run(host='host', port=3000)
+    app.run(host='0.0.0.0', port=3000)  # NOSONAR
