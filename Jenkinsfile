@@ -123,9 +123,9 @@ pipeline {
                 	rm -f /tmp/kubeconfig-jenkins
             	   """
         		}
-    		}
+    		  }
+	    }
 	}
-
     post {
         success {
             echo 'Pipeline passed successfully'
