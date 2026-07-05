@@ -1,3 +1,4 @@
 .env
 *.env
 cosign.key
+k8s/manifests/db-secret.yaml
