@@ -100,6 +100,7 @@ pipeline {
                     }
                     sh """
                         helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso \
+                        cat /tmp/kubeconfig-jenkins
                           --namespace ztso-app \
                           --set image.tag=${IMAGE_TAG} \
                           --kubeconfig /tmp/kubeconfig-jenkins
