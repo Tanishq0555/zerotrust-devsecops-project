@@ -95,8 +95,10 @@ pipeline {
         stage('Helm Deploy') {
             steps {
                 withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+                    script {
+                        writeFile file: '/tmp/kubeconfig-jenkins', text: KUBECONFIG_CONTENT
+                    }
                     sh """
-                        echo "${KUBECONFIG_CONTENT}" > /tmp/kubeconfig-jenkins
                         helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso \
                           --namespace ztso-app \
                           --set image.tag=${IMAGE_TAG} \
@@ -109,23 +111,6 @@ pipeline {
 
     }
 
-	stage('Helm Deploy') {
-	     steps {
-		withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-            	    script {
-                	writeFile file: '/tmp/kubeconfig-jenkins', text: KUBECONFIG_CONTENT
-            		}
-            	sh """
-                	helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso \
-                 	 --namespace ztso-app \
-                  	--set image.tag=${IMAGE_TAG} \
-                  	--kubeconfig /tmp/kubeconfig-jenkins
-                	rm -f /tmp/kubeconfig-jenkins
-            	   """
-        		}
-    		  }
-	    }
-	}
     post {
         success {
             echo 'Pipeline passed successfully'
@@ -135,3 +120,4 @@ pipeline {
         }
     }
 }
+
