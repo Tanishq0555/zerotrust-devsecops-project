@@ -1,0 +1,20 @@
+image:
+  tag: "latest"
+  pullPolicy: Always
+
+backend:
+  image: atharvahange/ztso-backend
+  port: 3000
+  replicas: 1
+
+frontend:
+  image: atharvahange/ztso-frontend
+  port: 80
+  replicas: 1
+
+database:
+  image: mysql:8.0
+  port: 3306
+  replicas: 1
+
+namespace: ztso-app

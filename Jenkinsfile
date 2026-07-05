@@ -99,13 +99,21 @@ stage('Gitleaks - Secret Scan') {
 	}
 
 
-        stage('Helm Deploy') {
-            steps {
-                echo 'Deploying to k3s...'
-            }
-        }
 
+stage('Helm Deploy') {
+    steps {
+        withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+            sh """
+                echo "${KUBECONFIG_CONTENT}" > /tmp/kubeconfig-jenkins
+                helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso \
+                  --namespace ztso-app \
+                  --set image.tag=${IMAGE_TAG} \
+                  --kubeconfig /tmp/kubeconfig-jenkins
+                rm -f /tmp/kubeconfig-jenkins
+            """
+        }
     }
+}
 
     post {
         success {
