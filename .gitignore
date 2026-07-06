@@ -2,3 +2,4 @@
 *.env
 cosign.key
 k8s/manifests/db-secret.yaml
+k8s/monitoring-secrets.yaml

@@ -1,0 +1,13 @@
+grafana:
+  adminPassword: admin123
+  service:
+    type: NodePort
+    nodePort: 30300
+
+prometheus:
+  prometheusSpec:
+    retention: 24h
+
+alertmanager:
+  alertmanagerSpec:
+    retention: 24h
