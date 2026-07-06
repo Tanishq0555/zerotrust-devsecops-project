@@ -77,37 +77,35 @@ pipeline {
                     string(credentialsId: 'cosign-password', variable: 'COSIGN_PASSWORD')
                 ]) {
                     sh """
-                        cosign sign --key $COSIGN_KEY \
-                            --tlog-upload=false \
-                            -a "pipeline=jenkins" \
-                            -a "commit=${IMAGE_TAG}" \
-                            ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} --yes
-                        cosign sign --key $COSIGN_KEY \
-                            --tlog-upload=false \
-                            -a "pipeline=jenkins" \
-                            -a "commit=${IMAGE_TAG}" \
-                            ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG} --yes
+                        cosign sign --key $COSIGN_KEY --tlog-upload=false -a "pipeline=jenkins" -a "commit=${IMAGE_TAG}" ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} --yes
+                        cosign sign --key $COSIGN_KEY --tlog-upload=false -a "pipeline=jenkins" -a "commit=${IMAGE_TAG}" ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG} --yes
                     """
                 }
             }
         }
 
-	stage('Helm Deploy') {
-    		steps {
-		        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-            		sh "helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso --namespace ztso-app --set image.tag=${IMAGE_TAG} --kubeconfig \$KUBECONFIG"
-        	}
-    	    }
-	}
+        stage('Helm Deploy') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh "helm upgrade --install ztso ${WORKSPACE}/k8s/helm/ztso --namespace ztso-app --set image.tag=${IMAGE_TAG} --kubeconfig \$KUBECONFIG"
+                }
+            }
+        }
 
     }
 
     post {
         success {
-            echo 'Pipeline passed successfully'
+            withCredentials([string(credentialsId: 'slack-webhook-jenkins', variable: 'SLACK_WEBHOOK')]) {
+                sh "curl -s -X POST -H 'Content-type: application/json' --data '{\"text\":\"✅ Pipeline Passed - Job: ${env.JOB_NAME} Build: ${env.BUILD_NUMBER} Commit: ${IMAGE_TAG}\"}' \$SLACK_WEBHOOK"
+            }
+            mail(to: 'media.apexmedia@gmail.com', subject: "PASSED - ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: "Pipeline passed. Commit: ${IMAGE_TAG}. View: ${env.BUILD_URL}")
         }
         failure {
-            echo 'Pipeline failed'
+            withCredentials([string(credentialsId: 'slack-webhook-jenkins', variable: 'SLACK_WEBHOOK')]) {
+                sh "curl -s -X POST -H 'Content-type: application/json' --data '{\"text\":\"🔴 Pipeline Failed - Job: ${env.JOB_NAME} Build: ${env.BUILD_NUMBER} Commit: ${IMAGE_TAG}\"}' \$SLACK_WEBHOOK"
+            }
+            mail(to: 'media.apexmedia@gmail.com', subject: "FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: "Pipeline failed. Commit: ${IMAGE_TAG}. View: ${env.BUILD_URL}")
         }
     }
 }
