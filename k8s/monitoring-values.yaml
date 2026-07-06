@@ -9,5 +9,51 @@ prometheus:
     retention: 24h
 
 alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+      smtp_smarthost: 'smtp.gmail.com:587'
+      smtp_from: 'media.apexmedia@gmail.com'
+      smtp_auth_username: 'media.apexmedia@gmail.com'
+      smtp_auth_password_file: /etc/alertmanager/secrets/alertmanager-slack-email/gmail-password
+      smtp_require_tls: true
+    route:
+      group_by: ['alertname', 'namespace']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: 'slack-email'
+      routes:
+        - receiver: 'null'
+          matchers:
+            - alertname = "Watchdog"
+    receivers:
+      - name: 'null'
+      - name: 'slack-email'
+        slack_configs:
+          - api_url_file: /etc/alertmanager/secrets/alertmanager-slack-email/slack-webhook-url
+            channel: '#alerts-cluster'
+            send_resolved: true
+            title: '{{ if eq .Status "firing" }}🔴{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
+            text: |
+              {{ range .Alerts }}
+              *Namespace:* {{ .Labels.namespace }}
+              *Pod:* {{ .Labels.pod }}
+              *Message:* {{ .Annotations.description }}
+              {{ end }}
+        email_configs:
+          - to: 'media.apexmedia@gmail.com'
+            send_resolved: true
+            headers:
+              subject: '[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}'
+    inhibit_rules:
+      - target_matchers:
+          - severity =~ warning|info
+        source_matchers:
+          - severity = critical
+        equal:
+          - namespace
+          - alertname
   alertmanagerSpec:
-    retention: 24h
+    secrets:
+      - alertmanager-slack-email
