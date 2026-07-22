@@ -1,0 +1,11 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sNoRoot
+metadata:
+  name: no-root-containers
+spec:
+  enforcementAction: dryrun
+  match:
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"]
+    namespaces: ["ztso-app"]
