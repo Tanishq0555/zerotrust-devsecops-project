@@ -65,6 +65,9 @@ pipeline {
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
                         docker push ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
+                        docker rmi ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
+                        docker rmi ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
+                        docker image prune -f
                     """
                 }
             }
