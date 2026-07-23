@@ -1,0 +1,25 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8scosignverify
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sCosignVerify
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8scosignverify
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not startswith(container.image, "atharvahange/")
+          msg := sprintf("Container '%v' must use an image from atharvahange/ repository", [container.image])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          not startswith(container.image, "atharvahange/")
+          msg := sprintf("Container '%v' must use an image from atharvahange/ repository", [container.image])
+        }
