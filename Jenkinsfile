@@ -20,7 +20,7 @@ pipeline {
         stage('Gitleaks - Secret Scan') {
             steps {
                 sh 'rm -rf .scannerwork'
-                sh 'gitleaks detect --source . --no-git --verbose --report-format json --report-path gitleaks-report.json || true'
+                sh 'gitleaks detect --source . --no-git --verbose --report-format json --report-path gitleaks-report.json'
             }
             post {
                 always {
