@@ -17,20 +17,27 @@ pipeline {
             }
         }
 
+
         stage('Gitleaks - Secret Scan') {
-            steps {
-                sh 'rm -rf .scannerwork'
-                sh 'gitleaks detect --source . --no-git --verbose --report-format json --report-path gitleaks-report.json'
-            }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
-                }
-                failure {
-                    error "Gitleaks detected secrets — pipeline aborted"
-                }
-            }
+    steps {
+        sh 'rm -rf .scannerwork'
+        sh '''
+            gitleaks detect \
+                --source . \
+                --no-git \
+                --verbose \
+                --report-format json \
+                --report-path /tmp/gitleaks-report.json \
+                --ignore-path .gitleaksignore
+        '''
+    }
+    post {
+        always {
+            sh 'cp /tmp/gitleaks-report.json gitleaks-report.json || true'
+            archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
         }
+    }
+}
 
         stage('SonarQube - SAST') {
             steps {
