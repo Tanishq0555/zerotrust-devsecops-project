@@ -112,9 +112,9 @@ pipeline {
              steps {
                  withCredentials([file(credentialsId: 'cosign-public-key', variable: 'COSIGN_PUB_KEY')]) {
                    sh """
-                     cosign verify --key $COSIGN_PUB_KEY --insecure-ignore-tlog=true ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
-                     cosign verify --key $COSIGN_PUB_KEY --insecure-ignore-tlog=true ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
-                     """
+                       cosign verify --key $COSIGN_PUB_KEY --insecure-ignore-tlog=true ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
+                       cosign verify --key $COSIGN_PUB_KEY --insecure-ignore-tlog=true ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
+                   """
                 }
             }
         }
