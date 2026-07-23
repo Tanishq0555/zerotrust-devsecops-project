@@ -48,6 +48,22 @@ pipeline {
             }
         }
 
+        stage('Trivy - Filesystem Scan') {
+            steps {
+                sh '''
+                    trivy fs --severity HIGH,CRITICAL \
+                    --format json \
+                    --output trivy-fs-report.json \
+                    .
+                '''
+            }
+    post {
+        always {
+            archiveArtifacts artifacts: 'trivy-fs-report.json', allowEmptyArchive: true
+                }
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 sh """
