@@ -1,0 +1,4 @@
+gitleaks-report.json
+trivy-backend-report.json
+trivy-frontend-report.json
+trivy-fs-report.json
