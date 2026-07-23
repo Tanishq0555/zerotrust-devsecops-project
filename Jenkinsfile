@@ -20,7 +20,15 @@ pipeline {
         stage('Gitleaks - Secret Scan') {
             steps {
                 sh 'rm -rf .scannerwork'
-                sh 'gitleaks detect --source . --no-git --verbose'
+                sh 'gitleaks detect --source . --no-git --verbose --report-format json --report-path gitleaks-report.json || true'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                }
+                failure {
+                    error "Gitleaks detected secrets — pipeline aborted"
+                }
             }
         }
 
@@ -52,9 +60,22 @@ pipeline {
         stage('Trivy - Image Scan') {
             steps {
                 sh """
-                    trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ${IMAGE_NAME_BACKEND}:${IMAGE_TAG}
-                    trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG}
+                    trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed \
+                        --format json --output trivy-backend-report.json \
+                        ${IMAGE_NAME_BACKEND}:${IMAGE_TAG} || true
+
+                    trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed \
+                        --format json --output trivy-frontend-report.json \
+                        ${IMAGE_NAME_FRONTEND}:${IMAGE_TAG} || true
                 """
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'trivy-backend-report.json, trivy-frontend-report.json', allowEmptyArchive: true
+                }
+                failure {
+                    error "Trivy found HIGH/CRITICAL vulnerabilities — pipeline aborted"
+                }
             }
         }
 
@@ -112,4 +133,3 @@ pipeline {
         }
     }
 }
-
