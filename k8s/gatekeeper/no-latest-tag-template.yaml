@@ -23,3 +23,15 @@ spec:
           not contains(container.image, ":")
           msg := sprintf("Container '%v' has no image tag", [container.image])
         }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          endswith(container.image, ":latest")
+          msg := sprintf("Container '%v' must not use ':latest' tag", [container.image])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          not contains(container.image, ":")
+          msg := sprintf("Container '%v' has no image tag", [container.image])
+        }

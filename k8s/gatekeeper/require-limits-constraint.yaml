@@ -3,9 +3,11 @@ kind: K8sRequiredLimits
 metadata:
   name: require-resource-limits
 spec:
-  enforcementAction: dryrun
+  enforcementAction: deny
   match:
     kinds:
       - apiGroups: ["apps"]
         kinds: ["Deployment"]
+      - apiGroups: [""]
+        kinds: ["Pod"]
     namespaces: ["ztso-app"]

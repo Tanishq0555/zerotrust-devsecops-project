@@ -3,9 +3,11 @@ kind: K8sNoRoot
 metadata:
   name: no-root-containers
 spec:
-  enforcementAction: dryrun
+  enforcementAction: deny
   match:
     kinds:
       - apiGroups: ["apps"]
         kinds: ["Deployment"]
+      - apiGroups: [""]
+        kinds: ["Pod"]
     namespaces: ["ztso-app"]
