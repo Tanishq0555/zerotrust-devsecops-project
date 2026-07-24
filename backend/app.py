@@ -11,7 +11,7 @@ def get_user(username):
     return cursor.fetchall()
 
 app = Flask(__name__)
-CORS(app) # NO SONAR
+CORS(app)
 
 def get_connection():
     return mysql.connector.connect(
