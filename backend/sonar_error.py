@@ -1,3 +1,6 @@
-import subprocess
-user_input = "test"
-subprocess.call(user_input, shell=True)
+import sqlite3
+def get_user(username):
+    conn = sqlite3.connect('test.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE username = '" + username + "'")
+    return cursor.fetchall()
