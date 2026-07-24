@@ -1,0 +1,86 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"admissionregistration.k8s.io/v1","kind":"ValidatingWebhookConfiguration","metadata":{"annotations":{},"labels":{"gatekeeper.sh/system":"yes"},"name":"gatekeeper-validating-webhook-configuration"},"webhooks":[{"admissionReviewVersions":["v1","v1beta1"],"clientConfig":{"service":{"name":"gatekeeper-webhook-service","namespace":"gatekeeper-system","path":"/v1/admit"}},"failurePolicy":"Fail","matchPolicy":"Exact","name":"validation.gatekeeper.sh","namespaceSelector":{"matchExpressions":[{"key":"kubernetes.io/metadata.name","operator":"NotIn","values":["kube-system","kube-public","kube-node-lease","gatekeeper-system"]}]},"rules":[{"apiGroups":["*"],"apiVersions":["*"],"operations":["CREATE","UPDATE"],"resources":["*"]}],"sideEffects":"None","timeoutSeconds":10},{"admissionReviewVersions":["v1","v1beta1"],"clientConfig":{"service":{"name":"gatekeeper-webhook-service","namespace":"gatekeeper-system","path":"/v1/admitlabel"}},"failurePolicy":"Fail","matchPolicy":"Exact","name":"check-ignore-label.gatekeeper.sh","namespaceSelector":{"matchExpressions":[{"key":"kubernetes.io/metadata.name","operator":"NotIn","values":["kube-system","kube-public","kube-node-lease","gatekeeper-system"]}]},"rules":[{"apiGroups":[""],"apiVersions":["*"],"operations":["CREATE","UPDATE"],"resources":["namespaces"]}],"sideEffects":"None","timeoutSeconds":10}]}
+  creationTimestamp: "2026-07-24T16:27:06Z"
+  generation: 2
+  labels:
+    gatekeeper.sh/system: "yes"
+  name: gatekeeper-validating-webhook-configuration
+  resourceVersion: "72486"
+  uid: e4c78a5a-38ff-402f-b000-463002029eaf
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURNVENDQWhtZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREF0TVJNd0VRWURWUVFLRXdwbllYUmwKYTJWbGNHVnlNUll3RkFZRFZRUURFdzFuWVhSbGEyVmxjR1Z5TFdOaE1CNFhEVEkyTURjd05URTJNREUwTjFvWApEVE0yTURjd01qRTNNREUwTjFvd0xURVRNQkVHQTFVRUNoTUtaMkYwWld0bFpYQmxjakVXTUJRR0ExVUVBeE1OCloyRjBaV3RsWlhCbGNpMWpZVENDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMNUoKalI0U2U2ZHVHQWNIQ1JxYnJEQjgvSndidHFzYUZtQjlKbWVxMTJ0Zkp5SUE0NTJFOGUxVllTZE9vVFNLOVRwTgpXc1J5OEY0ZVExUGV6Tnl4RlJnbVRrMG5SRW9DbXgyLzQzbWlud1Exa0Y4TXRIa0wyWU0zSXFCQkUwRnFPYXROCitaeTRmeHU5dFNPYmJoQWQ4ZXE4NDRpNUQyV2dwMTFreHFjOEd5ZE5KR05kTkVQeVIvTmllNzVER1l1Y1RRS1EKNVI3TFgrMHJyZXp2MHVDRVZqZE9RK3NRcGVjYzI3TzFncDFRejFyZFJMcVNCWjU0NS9wanZ0OEZFekplVzRvTgp2TWpkZlBZTVNvOHF3dy9zd05lOGZHT1EyNnJyOXlhNmlHaldqUVZNM01uUXUvdUI4K0c3bWh0Y1BmV2FXL0kxCnZXNVU5RHBzSnFBY3pkTDA3RzhDQXdFQUFhTmNNRm93RGdZRFZSMFBBUUgvQkFRREFnS2tNQThHQTFVZEV3RUIKL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRk1uRHFCK2pONGJDSGV2cWZTMGtST0dJNUd5T01CZ0dBMVVkRVFRUgpNQStDRFdkaGRHVnJaV1Z3WlhJdFkyRXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBSDhsNCttQksxZXJ0YWFPCjIxV0VCTE1xNnE2RktiNDRTZExEMnU2dnd5RjNNNmNhNGpvdFJMckhVVzA4eWdZdHZZeXVYNTE5RUo2VGUxeHcKZG1CWEw1Szl6VHpLd1hBMTVHNjM2K2NvM0dIU1RLekxiMGNpMm1zSkJVZWhPQ2FmcnJuT0RvcVRkOGQwTnNidQpYQ1ZXZTZLanNIWnBCZ24vdjJTM3BMR3Y3TXp1anZ4cFFyR0pVT3NGNzVRdGczeDNlR0w2K3djSmNySVFRRDdGClI5U1BvMmxqNzFub2V0UEN5aUZrbGlvQkhBaTVsMHNPLzN2ZWJYbXRpMUF6YlNES3NVeDRTK0VmcUl1VEVTdVkKQjNkU0ZVY09rd1VadThoamY2TkpqMGI2VmQyK3E3ck40LzFZcnlPc2MvNzlNcXdOMTArZjMyY2JPRTJ0RkVIbApTOWR5eHM0PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    service:
+      name: gatekeeper-webhook-service
+      namespace: gatekeeper-system
+      path: /v1/admit
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validation.gatekeeper.sh
+  namespaceSelector:
+    matchExpressions:
+    - key: kubernetes.io/metadata.name
+      operator: NotIn
+      values:
+      - kube-system
+      - kube-public
+      - kube-node-lease
+      - gatekeeper-system
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - '*'
+    apiVersions:
+    - '*'
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - '*'
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 10
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURNVENDQWhtZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREF0TVJNd0VRWURWUVFLRXdwbllYUmwKYTJWbGNHVnlNUll3RkFZRFZRUURFdzFuWVhSbGEyVmxjR1Z5TFdOaE1CNFhEVEkyTURjd05URTJNREUwTjFvWApEVE0yTURjd01qRTNNREUwTjFvd0xURVRNQkVHQTFVRUNoTUtaMkYwWld0bFpYQmxjakVXTUJRR0ExVUVBeE1OCloyRjBaV3RsWlhCbGNpMWpZVENDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMNUoKalI0U2U2ZHVHQWNIQ1JxYnJEQjgvSndidHFzYUZtQjlKbWVxMTJ0Zkp5SUE0NTJFOGUxVllTZE9vVFNLOVRwTgpXc1J5OEY0ZVExUGV6Tnl4RlJnbVRrMG5SRW9DbXgyLzQzbWlud1Exa0Y4TXRIa0wyWU0zSXFCQkUwRnFPYXROCitaeTRmeHU5dFNPYmJoQWQ4ZXE4NDRpNUQyV2dwMTFreHFjOEd5ZE5KR05kTkVQeVIvTmllNzVER1l1Y1RRS1EKNVI3TFgrMHJyZXp2MHVDRVZqZE9RK3NRcGVjYzI3TzFncDFRejFyZFJMcVNCWjU0NS9wanZ0OEZFekplVzRvTgp2TWpkZlBZTVNvOHF3dy9zd05lOGZHT1EyNnJyOXlhNmlHaldqUVZNM01uUXUvdUI4K0c3bWh0Y1BmV2FXL0kxCnZXNVU5RHBzSnFBY3pkTDA3RzhDQXdFQUFhTmNNRm93RGdZRFZSMFBBUUgvQkFRREFnS2tNQThHQTFVZEV3RUIKL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRk1uRHFCK2pONGJDSGV2cWZTMGtST0dJNUd5T01CZ0dBMVVkRVFRUgpNQStDRFdkaGRHVnJaV1Z3WlhJdFkyRXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBSDhsNCttQksxZXJ0YWFPCjIxV0VCTE1xNnE2RktiNDRTZExEMnU2dnd5RjNNNmNhNGpvdFJMckhVVzA4eWdZdHZZeXVYNTE5RUo2VGUxeHcKZG1CWEw1Szl6VHpLd1hBMTVHNjM2K2NvM0dIU1RLekxiMGNpMm1zSkJVZWhPQ2FmcnJuT0RvcVRkOGQwTnNidQpYQ1ZXZTZLanNIWnBCZ24vdjJTM3BMR3Y3TXp1anZ4cFFyR0pVT3NGNzVRdGczeDNlR0w2K3djSmNySVFRRDdGClI5U1BvMmxqNzFub2V0UEN5aUZrbGlvQkhBaTVsMHNPLzN2ZWJYbXRpMUF6YlNES3NVeDRTK0VmcUl1VEVTdVkKQjNkU0ZVY09rd1VadThoamY2TkpqMGI2VmQyK3E3ck40LzFZcnlPc2MvNzlNcXdOMTArZjMyY2JPRTJ0RkVIbApTOWR5eHM0PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    service:
+      name: gatekeeper-webhook-service
+      namespace: gatekeeper-system
+      path: /v1/admitlabel
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: check-ignore-label.gatekeeper.sh
+  namespaceSelector:
+    matchExpressions:
+    - key: kubernetes.io/metadata.name
+      operator: NotIn
+      values:
+      - kube-system
+      - kube-public
+      - kube-node-lease
+      - gatekeeper-system
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - '*'
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 10
