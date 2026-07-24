@@ -3,6 +3,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
 
+import sqlite3
+def get_user(username):
+    conn = sqlite3.connect('test.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE username = '" + username + "'")
+    return cursor.fetchall()
+
 app = Flask(__name__)
 CORS(app) # NO SONAR
 
