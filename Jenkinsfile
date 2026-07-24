@@ -28,7 +28,7 @@ pipeline {
                 --verbose \
                 --report-format json \
                 --report-path /tmp/gitleaks-report.json \
-                --ignore-path .gitleaksignore
+                --gitleaks-ignore-path .gitleaksignore
         '''
     }
     post {
