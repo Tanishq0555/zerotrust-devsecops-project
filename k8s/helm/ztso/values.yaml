@@ -6,15 +6,26 @@ backend:
   image: atharvahange/ztso-backend
   port: 3000
   replicas: 1
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
 
 frontend:
   image: atharvahange/ztso-frontend
-  port: 80
+  port: 8080
   replicas: 1
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
 
 database:
   image: mysql:8.0
   port: 3306
   replicas: 1
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 999
 
 namespace: ztso-app
