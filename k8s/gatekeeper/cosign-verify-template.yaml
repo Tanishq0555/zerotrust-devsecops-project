@@ -10,16 +10,21 @@ spec:
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
+
+
         package k8scosignverify
 
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           not startswith(container.image, "atharvahange/")
+          not startswith(container.image, "mysql:")
           msg := sprintf("Container '%v' must use an image from atharvahange/ repository", [container.image])
         }
 
         violation[{"msg": msg}] {
           container := input.review.object.spec.template.spec.containers[_]
           not startswith(container.image, "atharvahange/")
+          not startswith(container.image, "mysql:")
           msg := sprintf("Container '%v' must use an image from atharvahange/ repository", [container.image])
         }
+
