@@ -33,6 +33,10 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "500m"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+            allowPrivilegeEscalation: false
       volumes:
         - name: db-storage
           persistentVolumeClaim:

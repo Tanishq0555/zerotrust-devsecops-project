@@ -17,7 +17,6 @@ spec:
       - name: frontend
         image: {{ .Values.frontend.image }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        imagePullPolicy: Always
         ports:
           - containerPort: 80
         resources:
@@ -27,3 +26,7 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "200m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
