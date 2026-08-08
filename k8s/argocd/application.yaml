@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/Tanishq0555/zerotrust-devsecops-project.git
-    targetRevision: ztso-devops
+    targetRevision: ztso-devsecops-local-setup
     path: k8s/helm/ztso
     helm:
       valueFiles:
