@@ -3,7 +3,7 @@ image:
   pullPolicy: Always
 
 backend:
-  image: atharvahange/ztso-backend
+  image:"487337209656.dkr.ecr.us-east-1.amazonaws.com/ztso-backend"
   port: 3000
   replicas: 1
   securityContext:
@@ -12,7 +12,7 @@ backend:
     allowPrivilegeEscalation: false
 
 frontend:
-  image: atharvahange/ztso-frontend
+  image:"487337209656.dkr.ecr.us-east-1.amazonaws.com/ztso-frontend"
   port: 8080
   replicas: 1
   securityContext:
