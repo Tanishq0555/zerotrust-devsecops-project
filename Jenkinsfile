@@ -47,7 +47,7 @@ pipeline {
 
         stage('SonarQube - SAST') {
             steps {
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('sonarqube server') {
                     sh "${tool 'sonarqube-scanner'}/bin/sonar-scanner"
                 }
             }
