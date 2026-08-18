@@ -148,7 +148,7 @@ pipeline {
                         sed -i 's|tag:.*|tag: "${IMAGE_TAG}"|g' k8s/argocd/values-override.yaml
                         git add k8s/argocd/values-override.yaml
                         git diff --staged --quiet || git commit -m "Update image tag to ${IMAGE_TAG} [skip ci]"
-                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Tanishq0555/zerotrust-devsecops-project.git HEAD:refs/heads/ztso-devops-local-setup
+                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Tanishq0555/zerotrust-devsecops-project.git HEAD:refs/heads/ztso-devsecops-pipeline
                     """
                 }
             }
