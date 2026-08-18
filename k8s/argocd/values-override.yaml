@@ -1,5 +1,7 @@
 backend:
-  tag: "latest"
+  tag: "a1b2c3d"
+  pullPolicy: IfNotPresent
 
 frontend:
-  tag: "latest"
+  tag: "a1b2c3d"
+  pullPolicy: IfNotPresent
