@@ -1,0 +1,20 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sApprovedRegistry
+metadata:
+  name: require-approved-registry
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"]
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - ztso-app
+  parameters:
+    allowedRegistries:
+      - "487337209656.dkr.ecr.us-east-1.amazonaws.com/"
+      # Exception: stock upstream MySQL, not built by this pipeline.
+      # Better long-term: mirror it into ECR and drop this entry.
+      - "mysql:"
