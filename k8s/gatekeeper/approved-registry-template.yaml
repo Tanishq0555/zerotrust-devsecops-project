@@ -1,0 +1,47 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sapprovedregistry
+  annotations:
+    description: >-
+      Admission-time allow-listing of container image registries.
+      NOTE: this does NOT verify Cosign signatures. OPA Gatekeeper cannot
+      reach a registry during admission evaluation, so cryptographic
+      signature verification requires Gatekeeper's external data provider
+      (cosign-gatekeeper-provider) or Kyverno's verifyImages rule.
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sApprovedRegistry
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            allowedRegistries:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sapprovedregistry
+
+        # Pods
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not registry_allowed(container.image)
+          msg := sprintf("Container '%v' uses an image outside the approved registry list %v", [container.image, input.parameters.allowedRegistries])
+        }
+
+        # Deployments / other pod templates
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          not registry_allowed(container.image)
+          msg := sprintf("Container '%v' uses an image outside the approved registry list %v", [container.image, input.parameters.allowedRegistries])
+        }
+
+        registry_allowed(image) {
+          prefix := input.parameters.allowedRegistries[_]
+          startswith(image, prefix)
+        }
