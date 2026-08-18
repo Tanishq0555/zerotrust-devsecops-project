@@ -2,4 +2,4 @@
 *.env
 cosign.key
 k8s/helm/ztso/templates/db-secret.yaml
-k8s/monitoring-secrets.yaml
+k8s/monitoring-values.yaml
